@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Togethering</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+<body>
+    <div class="register">
+        <h1 class="titlehead">Register</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            
+            <input class="field" type="text" name="username" id="username" placeholder="Username">
+            
+            
+            <input class="field" type="email" name="email" id="email" placeholder="Email Address">
+            
+            
+            <input class="field" type="password" name="pass" id="pass" placeholder="Password">
+            
+            
+            <input class="field" type="password" name="cpass" id="cpass" placeholder="Confirm Password">
+            
+            
+            <input class="checkbox" type="checkbox" name="check" id="check"> I agree to the <a href="">Terms & Conditions</a>
+            
+            <button type="submit">Sign Up</button>
+            <p>Already Have an Account? <a href="{% url 'login' %}">Login Here</a></p>
+        </form>
+    </div>
+</body>
+</html>

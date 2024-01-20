@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Togethering - Watch it Together</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/homeee.css" %}">
+</head>
+<body>
+    <nav class="greycon">
+        <a href="{% url 'home' %}"><h1 class="goldclr">TOGETHER.<span class="coloringgg">ING</span></h1></a>
+        
+        <ul id="username">
+            <li>
+                <a href="">Guest <i class="fa-solid fa-chevron-down"></i></a>
+                
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <div class="maincontainer">
+        <h1 class="watchead">Watch IT Together</h1>
+        <div class="innercontainer">
+            <div class="text">
+                <h1 class="linkhead">Link: </h1>
+            </div>
+            <div class="field">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input class="linkbox" type="url" name="link" id="link" placeholder="Paste the Link Here">
+
+                    <button class="gobtn" type="submit">Go →</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="fooflex">
+
+            <div class="handles">
+                <a href="https://www.facebook.com/john.byro.56"><img src="{% static "images/facebook.png" %}" alt="F" width="35px" height="35px"></a>
+                <a href="https://www.linkedin.com/in/only4aj/"><img src="{% static "images/linkedin.png" %}" alt="L" width="35px" height="35px"></a>
+                <a href="https://www.instagram.com/only4aj/"><img src="{% static "images/instagram.png" %}" alt="I" width="35px" height="35px"></a>
+                <a href="https://www.youtube.com/channel/UC23C6Vghe1eROCsvEyM-4hQ"><img src="{% static "images/youtube.png" %}" alt="Y" width="35px" height="35px"></a>
+            </div>
+
+            <p class="copyright">Copyright © 2023 TOGETHERING</p>
+            <p>All Rights Reserved</p>
+        </div>
+    </footer>
+</body>
+</html>

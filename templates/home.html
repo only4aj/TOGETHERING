@@ -29,7 +29,7 @@
                 <h1 class="linkhead">Link: </h1>
             </div>
             <div class="field">
-                <form action="" method="post">
+                <form action="{% url 'watch' %}" method="post">
                     {% csrf_token %}
                     <input class="linkbox" type="url" name="link" id="link" placeholder="Paste the Link Here">
 

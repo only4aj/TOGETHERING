@@ -1,0 +1,81 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgb(29, 29, 29);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav a{
+    text-decoration: none;
+}
+
+.coloringgg{
+    color: rgb(198, 193, 193);
+}
+
+nav ul li {
+    text-decoration: none;
+    padding: 10px;
+    padding-right: 20px;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    padding-right: 20px;
+}
+
+
+
+.greycon {
+    background-color: rgb(59, 59, 59);
+    height: 50px;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+}
+
+nav ul li a {
+    text-decoration: none;
+    padding: 5px;
+    list-style-type: none;
+    color: rgb(231, 225, 225);
+    font-size: 22px;
+    font-weight: bold;
+    transition: 0.5s all;
+}
+
+.goldclr {
+    color: rgb(241, 186, 46);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding-left: 20px;
+    padding-right: 70px;
+    font-size: 30px;
+}
+
+nav ul li a:hover {
+    color: rgb(226, 199, 42);
+    transition: ease-in;
+}
+
+.video-container {
+    width: 60vw; /* Set width to 30% of the viewport width */
+    max-width: 600px; /* Set a maximum width if necessary */
+    margin: 0; /* Remove default margin */
+    float: left; /* Float the container to the left */
+}
+
+.video-container iframe {
+    width: 100%;
+    height:350px; /* Set a fixed height for the video container */
+    max-height: 700px; /* Set a maximum height if necessary */
+}

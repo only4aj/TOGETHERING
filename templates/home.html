@@ -14,8 +14,10 @@
         
         <ul id="username">
             <li>
-                <a href="">Guest <i class="fa-solid fa-chevron-down"></i></a>
-                
+                <a href="{% url 'home' %}" class="profont">{{user.username}} <i class="fa-solid fa-chevron-down"></i></a>
+                <ul class="profile" id="profile">
+                    <li><a href="{% url 'logout' %}" onclick="location.reload()">Logout</a></li>
+                </ul>
             </li>
 
         </ul>
@@ -29,12 +31,14 @@
                 <h1 class="linkhead">Link: </h1>
             </div>
             <div class="field">
-                <form action="{% url 'watch' %}" method="post">
+                <p>{{room_name}}</p>
+                <form method="post" action="/watch/{{room_name}}/">
                     {% csrf_token %}
-                    <input class="linkbox" type="url" name="link" id="link" placeholder="Paste the Link Here">
-
-                    <button class="gobtn" type="submit">Go →</button>
+                    <input class="linkbox" type="text" name="room" id="room" placeholder="Paste the Link Here">
+    
+                    <button type="submit" id="submit" value="submit" class="gobtn">Go →</button>
                 </form>
+                
             </div>
         </div>
     </div>
@@ -52,5 +56,100 @@
             <p>All Rights Reserved</p>
         </div>
     </footer>
+
+    <div id="room_name" data-room-name="{{ room_name }}"></div>
+
+    {% comment %}
+    <script src="{% static "js/homee.js" %}"></script>
+    {% endcomment %}
+
+    <!-- Add this script at the end of your home.html file -->
+    <script>
+
+        var btn = document.getElementById("submit");
+    document.querySelector("#room").focus();
+    document.querySelector("#room").onkeyup = function(e){
+        if (e.keyCode === 13) {// press enter 
+            btn.click();
+        }
+    };
+    btn.onclick = function(e){
+        var roomname = "{{room_name}}";
+        window.location.pathname = "/watch/" + roomname + "/";
+    };
+
+    // WebSocket Connection
+    var socket = new WebSocket("ws://" + window.location.host + "/ws/watch/{{ room_name }}/");
+
+    // Function to send play event to WebSocket server
+    function sendPlayEvent(currentTime) {
+        var message = {
+            'message_type': 'video.play',
+            'current_time': currentTime
+        };
+        socket.send(JSON.stringify(message));
+    }
+
+    // Function to send pause event to WebSocket server
+    function sendPauseEvent(currentTime) {
+        var message = {
+            'message_type': 'video.pause',
+            'current_time': currentTime
+        };
+        socket.send(JSON.stringify(message));
+    }
+</script>
+
+<!-- Replace your existing script with this updated script -->
+<script>
+
+
+    // JSON.parse the roomname from JSON string
+    const roomname = JSON.parse(document.getElementById("roomname").textContent);
+    const chatsocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/watch/' + roomname + '/'
+    );
+    chatsocket.onmessage = function(e){
+        const data = JSON.parse(e.data);
+        document.querySelector("#chatarea").value += (data.user + ":" + '\n' + data.message + '\n' + '\n');
+    };
+    document.getElementById("chatbtn").onclick = function(e){
+        const msg = document.getElementById("chatinput").value;
+        chatsocket.send(JSON.stringify({'message':msg}));
+        document.querySelector("#chatinput").value ='';
+    };
+    chatsocket.onclose = function(e){
+        console.log("chatsocket close");
+    };
+    document.querySelector("#chatinput").focus();
+    document.querySelector("#chatinput").onkeyup = function(e){
+        if (e.keyCode === 13) {// press enter 
+            document.querySelector("#chatbtn").click();
+        }
+    };
+
+    // Add event listener for video link input field
+    document.getElementById("vidlink").onkeyup = function(e) {
+        var video = document.getElementById("vidlink");
+        console.log(video)
+        if (e.keyCode === 13) { // If Enter key is pressed
+            e.preventDefault(); // Prevent the default form submission behavior
+            const link = document.getElementById("vidlink").value.trim(); // Get the entered video link
+            
+            // Ensure the link is not empty
+            if (link !== '') {
+                // Send a message to the WebSocket server to notify others about the new video link
+                if (chatsocket.readyState === WebSocket.OPEN) {
+                    chatsocket.send(JSON.stringify({'message_type': 'video.play', 'url': link}));
+                } else {
+                    console.error("WebSocket connection is not open.");
+                }
+            }
+
+            // Clear the input field
+            document.getElementById("vidlink").value = '';
+        }
+    };
+    </script>
 </body>
 </html>

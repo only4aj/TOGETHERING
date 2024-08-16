@@ -8,6 +8,31 @@ body{
     background-color: rgb(29, 29, 29);
 }
 
+ul li ul.profile li{
+    display: block;
+}
+
+
+ul li ul.profile{
+    margin-top: 15px;
+    width: 100%;
+    background: #333333;
+    /* background-size: 100px 100px; */
+    position: absolute;
+    z-index: 999;
+    display: none;
+}
+
+
+.profont{
+    font-size: 20px;
+}
+
+ul li:hover ul.profile{
+    display: block;
+}
+
+
 nav {
     display: flex;
     align-items: center;
@@ -147,4 +172,23 @@ p{
     display: flex;
     flex-direction: row;
     gap: 30px;
+}
+
+
+
+
+/* //// */
+
+
+
+
+nav ul li a:hover {
+    color: rgb(226, 199, 42);
+    transition: ease-in;
+}
+
+
+nav ul li a:hover {
+    color: rgb(226, 199, 42);
+    transition: ease-in;
 }

@@ -8,6 +8,32 @@ body{
     background-color: rgb(29, 29, 29);
 }
 
+ul li ul.profile li{
+    display: block;
+}
+
+
+ul li ul.profile{
+    margin-top: 15px;
+    width: 100%;
+    background: #333333;
+    /* background-size: 100px 100px; */
+    position: absolute;
+    z-index: 999;
+    display: none;
+}
+
+
+.profont{
+    font-size: 20px;
+}
+
+ul li:hover ul.profile{
+    display: block;
+}
+
+
+
 nav {
     display: flex;
     align-items: center;
@@ -68,14 +94,82 @@ nav ul li a:hover {
 }
 
 .video-container {
-    width: 60vw; /* Set width to 30% of the viewport width */
+    width: 1280px; /* Set width to 30% of the viewport width */
+    height: 350px;
     max-width: 600px; /* Set a maximum width if necessary */
     margin: 0; /* Remove default margin */
     float: left; /* Float the container to the left */
+    background-color: black;
 }
 
 .video-container iframe {
     width: 100%;
     height:350px; /* Set a fixed height for the video container */
     max-height: 700px; /* Set a maximum height if necessary */
+}
+
+
+.maincontainer{
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+
+
+
+.rightside{
+    display: flex;
+    flex-direction: column;
+    border: 4px solid rgb(241, 186, 46);
+    border-radius: 10px;
+}
+
+#chatinput{
+    height: 30px;
+    padding-left: 5px;
+}
+
+.chatboxhead{
+    background-color: rgb(241, 186, 46);
+    padding-left: 55px;
+    color: rgb(247, 237, 237);
+}
+
+#chatbtn{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(49, 49, 49);
+}
+
+#chatarea{
+    color: rgb(31, 31, 31);
+    background-color: white;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-left: 5px;
+    resize: none;
+}
+
+
+
+
+/* //// */
+
+
+
+
+nav ul li a:hover {
+    color: rgb(226, 199, 42);
+    transition: ease-in;
+}
+
+
+nav ul li a:hover {
+    color: rgb(226, 199, 42);
+    transition: ease-in;
 }

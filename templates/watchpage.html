@@ -1,34 +1,437 @@
-{% load embed_video_tags %}
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watching - Togethering</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://www.youtube.com/iframe_api"></script>
+    {% load static %} <link rel="stylesheet" href="{% static
+    "css/watchpageee.css" %}">
+  </head>
+  <body>
+    <nav class="greycon">
+      <a href="{% url 'home' %}"
+        ><h1 class="goldclr">
+          TOGETHER.<span class="coloringgg">ING</span>
+        </h1></a
+      >
+
+      <ul id="username">
+        <li>
+          <a href="{% url 'home' %}" class="profont"
+            >{{user.username}} <i class="fa-solid fa-chevron-down"></i
+          ></a>
+          <ul class="profile" id="profile">
+            <li>
+              <a href="{% url 'logout' %}" onclick="location.reload()"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div class="maincontainer">
+      <div class="leftside">
+        {% if play %} {% with item=play.last %}
+        <div class="video-container">
+          <video id="watchvideo" src="{{ item.url }}" controls></video>
+        </div>
+        {% endwith %} {% else %}
+        <div class="video-container">
+          <video id="watchvideo" controls></video>
+        </div>
+        {% endif %}
+      </div>
+      <div class="rightside">
+        <h1 class="chatboxhead">CHAT BOX</h1>
+        <textarea
+          readonly
+          name="chatarea"
+          id="chatarea"
+          cols="40"
+          rows="15"
+        ></textarea>
+        <input
+          type="text"
+          name="chatinput"
+          id="chatinput"
+          placeholder="Enter your message here"
+        />
+        <button id="chatbtn">Send</button>
+      </div>
+    </div>
+
+    {{ roomname|json_script:"roomname" }}
+    <script>
+      const roomname = JSON.parse(
+        document.getElementById("roomname").textContent
+      );
+      const chatsocket = new WebSocket(
+        "ws://" + location.host + "/ws/watch/" + roomname + "/"
+      );
+      chatsocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        if (data.message_type === "chat_messages") {
+          document.querySelector("#chatarea").value +=
+            data.user + ":" + "\n" + data.messages + "\n" + "\n";
+        } else if (data.message_type === "video.play") {
+          const video = document.getElementById("watchvideo");
+          video.currentTime = data.current_time;
+          video.play();
+        } else if (data.message_type === "video.pause") {
+          const video = document.getElementById("watchvideo");
+          video.currentTime = data.current_time;
+          video.pause();
+        }
+      };
+      document.getElementById("chatbtn").onclick = function (e) {
+        const msg = document.getElementById("chatinput").value;
+        chatsocket.send(JSON.stringify({ message: msg }));
+        document.querySelector("#chatinput").value = "";
+      };
+      chatsocket.onclose = function (e) {
+        console.log("chatsocket close");
+      };
+      document.querySelector("#chatinput").focus();
+      document.querySelector("#chatinput").onkeyup = function (e) {
+        if (e.keyCode === 13) {
+          // press enter
+          document.querySelector("#chatbtn").click();
+        }
+      };
+
+      // Add event listener for video play/pause controls
+      const video = document.getElementById("watchvideo");
+      video.onplay = function () {
+        chatsocket.send(
+          JSON.stringify({
+            message_type: "video.play",
+            current_time: video.currentTime,
+          })
+        );
+      };
+      video.onpause = function () {
+        chatsocket.send(
+          JSON.stringify({
+            message_type: "video.pause",
+            current_time: video.currentTime,
+          })
+        );
+      };
+    </script>
+  </body>
+</html>
+{% endcomment %}
+
+
+
+{% comment %} --------------------- CORRECTED VERSION ---------- {% endcomment %}
+
+{% comment %} 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watching - Togethering</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://www.youtube.com/iframe_api"></script>
+    {% load static %} <link rel="stylesheet" href="{% static
+    "css/watchpageee.css" %}">
+  </head>
+  <body>
+    <nav class="greycon">
+      <a href="{% url 'home' %}"
+        ><h1 class="goldclr">
+          TOGETHER.<span class="coloringgg">ING</span>
+        </h1></a
+      >
+
+      <ul id="username">
+        <li>
+          <a href="{% url 'home' %}" class="profont"
+            >{{user.username}} <i class="fa-solid fa-chevron-down"></i
+          ></a>
+          <ul class="profile" id="profile">
+            <li>
+              <a href="{% url 'logout' %}" onclick="location.reload()"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <div class="maincontainer">
+      <div class="leftside">
+        <div class="video-container" id="player"></div>
+      </div>
+      <div class="rightside">
+        <h1 class="chatboxhead">CHAT BOX</h1>
+        <textarea
+          readonly
+          name="chatarea"
+          id="chatarea"
+          cols="40"
+          rows="15"
+        ></textarea>
+        <input
+          type="text"
+          name="chatinput"
+          id="chatinput"
+          placeholder="Enter your message here"
+        />
+        <button id="chatbtn">Send</button>
+      </div>
+    </div>
+
+    {{ roomname|json_script:"roomname" }}
+    <script>
+      const roomname = JSON.parse(
+        document.getElementById("roomname").textContent
+      );
+      const chatsocket = new WebSocket(
+        "ws://" + location.host + "/ws/watch/" + roomname + "/"
+      );
+      console.log(chatsocket);
+      chatsocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(e.data);
+        console.log(data.message);
+        if (data.message !== "") {
+          console.log(data);
+          document.querySelector("#chatarea").value +=
+            data.user + ":" + "\n" + data.message + "\n" + "\n";
+          document.querySelector("#chatarea").scrollTop =
+            document.querySelector("#chatarea").scrollHeight;
+        } else if (data.message_type === "video.play") {
+          player.seekTo(data.current_time);
+          player.playVideo();
+        } else if (data.message_type === "video.pause") {
+          player.seekTo(data.current_time);
+          player.pauseVideo();
+        }
+      };
+      document.getElementById("chatbtn").onclick = function (e) {
+        const msg = document.getElementById("chatinput").value;
+        chatsocket.send(JSON.stringify({ message: msg }));
+        document.querySelector("#chatinput").value = "";
+      };
+      chatsocket.onclose = function (e) {
+        console.log("chatsocket close");
+      };
+      document.querySelector("#chatinput").focus();
+      document.querySelector("#chatinput").onkeyup = function (e) {
+        if (e.keyCode === 13) {
+          // press enter
+          document.querySelector("#chatbtn").click();
+        }
+      };
+
+      // YouTube Player API integration
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+          height: "390",
+          width: "640",
+          videoId: "85Be12w9Ud8", // Replace with actual video ID
+          playerVars: { autoplay: 0, controls: 1 },
+          events: {
+            onStateChange: onPlayerStateChange,
+          },
+        });
+      }
+      
+      function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+          chatsocket.send(
+            JSON.stringify({
+              message_type: "video.play",
+              current_time: player.getCurrentTime(),
+            })
+          );
+        } else if (event.data === YT.PlayerState.PAUSED) {
+          chatsocket.send(
+            JSON.stringify({
+              message_type: "video.pause",
+              current_time: player.getCurrentTime(),
+            })
+          );
+        }
+      }
+    </script>
+  </body>
+</html> {% endcomment %}
+
+
+{% comment %} --------------------------------------------------------------- {% endcomment %}
+
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Watching - Togethering</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://www.youtube.com/iframe_api"></script>
     {% load static %}
-    <link rel="stylesheet" href="{% static "css/watchpage.css" %}">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static "css/watchpageee.css" %}">
+  </head>
+  <body>
     <nav class="greycon">
-        <a href="{% url 'home' %}"><h1 class="goldclr">TOGETHER.<span class="coloringgg">ING</span></h1></a>
-        
-        <ul id="username">
+      <a href="{% url 'home' %}"
+        ><h1 class="goldclr">
+          TOGETHER.<span class="coloringgg">ING</span>
+        </h1></a
+      >
+
+      <ul id="username">
+        <li>
+          <a href="{% url 'home' %}" class="profont"
+            >{{user.username}} <i class="fa-solid fa-chevron-down"></i
+          ></a>
+          <ul class="profile" id="profile">
             <li>
-                <a href="">Guest <i class="fa-solid fa-chevron-down"></i></a>
-                
+              <a href="{% url 'logout' %}" onclick="location.reload()"
+                >Logout</a
+              >
             </li>
-
-        </ul>
-
+          </ul>
+        </li>
+      </ul>
     </nav>
-    {% if play %}
-        {% with item=play.last %}
-            <div class="video-container">
-                {% video item.url '1280x720' %}
-            </div>
-        {% endwith %}
-    {% endif %}
-</body>
+    <div class="maincontainer">
+      <div class="leftside">
+        <div class="video-container" id="player"></div>
+      </div>
+      <div class="rightside">
+        <h1 class="chatboxhead">CHAT BOX</h1>
+        <textarea
+          readonly
+          name="chatarea"
+          id="chatarea"
+          cols="40"
+          rows="15"
+        ></textarea>
+        <input
+          type="text"
+          name="chatinput"
+          id="chatinput"
+          placeholder="Enter your message here"
+        />
+        <button id="chatbtn">Send</button>
+      </div>
+    </div>
+
+    {{ roomname|json_script:"roomname" }}
+    <script>
+      const roomname = JSON.parse(
+        document.getElementById("roomname").textContent
+      );
+      const chatsocket = new WebSocket(
+        "ws://" + location.host + "/ws/watch/" + roomname + "/"
+      );
+      {% comment %} console.log(chatsocket); {% endcomment %}
+      chatsocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        // console.log(e.data);
+        // console.log(data.message);
+        if (data.message) {
+          document.querySelector("#chatarea").value +=
+            data.user + ":" + "\n" + data.message + "\n" + "\n";
+          document.querySelector("#chatarea").scrollTop =
+            document.querySelector("#chatarea").scrollHeight;
+        } else if (data.message_type === "video.play") {
+          if (data.current_time !== undefined) {
+            player.seekTo(data.current_time);
+          }
+          player.playVideo();
+        } else if (data.message_type === "video.pause") {
+          if (data.current_time !== undefined) {
+            player.seekTo(data.current_time);
+          }
+          player.pauseVideo();
+        }
+      };
+      document.getElementById("chatbtn").onclick = function (e) {
+        const msg = document.getElementById("chatinput").value;
+        chatsocket.send(JSON.stringify({ message: msg }));
+        document.querySelector("#chatinput").value = "";
+      };
+      chatsocket.onclose = function (e) {
+        console.log("chatsocket close");
+      };
+      document.querySelector("#chatinput").focus();
+      document.querySelector("#chatinput").onkeyup = function (e) {
+        if (e.keyCode === 13) {
+          // press enter
+          document.querySelector("#chatbtn").click();
+        }
+      };
+
+      // YouTube Player API integration
+      let player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+          height: "390",
+          width: "640",
+          videoId: "{{ video_link }}", // Replace with actual video ID
+          playerVars: { autoplay: 0, controls: 1 },
+          events: {
+            onStateChange: onPlayerStateChange,
+            onReady: onPlayerReady,
+          },
+        });
+      }
+
+      function onPlayerReady(event) {
+        // Sync video with others when player is ready
+        chatsocket.send(
+          JSON.stringify({
+            message_type: "video.sync",
+            current_time: player.getCurrentTime(),
+          })
+        );
+      }
+
+
+      function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+          chatsocket.send(
+            JSON.stringify({
+              message_type: "video.play",
+              current_time: player.getCurrentTime(),
+            })
+          );
+        } else if (event.data === YT.PlayerState.PAUSED) {
+          chatsocket.send(
+            JSON.stringify({
+              message_type: "video.pause",
+              current_time: player.getCurrentTime(),
+            })
+          );
+        }
+      }
+    </script>
+  </body>
 </html>

@@ -4,8 +4,9 @@ from TOGETHERING_APP import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('' , views.login , name='login'),
-    path('register/' , views.register , name='register'),
-    path('home/' , views.home , name='home'),
-    path('watch/' , views.watch , name='watch')
+    path('', views.home, name='home'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.LogOut, name='logout'),
+    path('watch/<str:room_name>/', views.watch, name='watch'),
 ]

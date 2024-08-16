@@ -395,7 +395,7 @@
         player = new YT.Player("player", {
           height: "390",
           width: "640",
-          videoId: "{{ video_link }}", // Replace with actual video ID
+          videoId: "{{ video_link }}".split("=")[1], // Replace with actual video ID
           playerVars: { autoplay: 0, controls: 1 },
           events: {
             onStateChange: onPlayerStateChange,
@@ -403,7 +403,6 @@
           },
         });
       }
-
       function onPlayerReady(event) {
         // Sync video with others when player is ready
         chatsocket.send(

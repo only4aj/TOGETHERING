@@ -3,9 +3,12 @@ from .models import Video
 from django.contrib import messages , auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 import uuid
 import random
 import string
+# global link
+link = ""
 
 def generate_room_name(length=10):
     characters = string.ascii_letters + string.digits
@@ -75,7 +78,22 @@ def home(request):
 @login_required(login_url='login')
 def watch(request, room_name):
     if request.method == "POST":
+        global link
         link = request.POST.get('room')
+        if(link != ""):
+            request.session.create()
+            print(link + " if")
+            request.session["link"] = link
+            request.session.save()
+        else:
+            session_id = request.session.session_key
+            session_obj = Session.objects.get(session_key=session_id)
+            session_data = session_obj.get_decoded()
+            link = session_data.get("link")
+            # link = request.session['link']
+            print(link+" else")
+
+
 
         if(link == ''):
             return render(request, 'home.html')

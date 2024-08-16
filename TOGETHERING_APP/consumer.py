@@ -2,6 +2,8 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
+ctime = ''
+
 class Chating(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -17,12 +19,12 @@ class Chating(WebsocketConsumer):
 
     def receive(self, text_data=None, bytes_data=None):
         data = json.loads(text_data)
-        print(f"{data} DATATATATATTATATATATA")
         if 'message_type' in data:
             message_type = data['message_type']
             if message_type == 'video.play':
                 current_time = data['current_time']
                 # Broadcast play event with current time to all clients
+                # print(current_time)
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_name, {
                         'type': 'video_play',
@@ -58,7 +60,6 @@ class Chating(WebsocketConsumer):
 
     def video_play(self, event):
         current_time = event['current_time']
-        print(f"{current_time} Itna Ho Raha Hai ...")
         # Update video playback time on client-side
         self.send(text_data=json.dumps({
             'message_type': 'video.play',

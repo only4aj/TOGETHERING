@@ -1,8 +1,11 @@
 import json
+# import time
+import asyncio
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
-ctime = ''
+
+ctime = -1
 
 class Chating(WebsocketConsumer):
     def connect(self):
@@ -24,13 +27,18 @@ class Chating(WebsocketConsumer):
             if message_type == 'video.play':
                 current_time = data['current_time']
                 # Broadcast play event with current time to all clients
-                # print(current_time)
-                async_to_sync(self.channel_layer.group_send)(
-                    self.room_name, {
-                        'type': 'video_play',
-                        'current_time': current_time
-                    }
-                )
+                print(current_time)
+                # time.sleep(10)
+                # asyncio.sleep(2)
+                global ctime
+                if ctime!=int(current_time):
+                    ctime = int(current_time)
+                    async_to_sync(self.channel_layer.group_send)(
+                        self.room_name, {
+                            'type': 'video_play',
+                            'current_time': current_time
+                        }
+                    )
             elif message_type == 'video.pause':
                 current_time = data['current_time']
                 # Broadcast pause event with current time to all clients

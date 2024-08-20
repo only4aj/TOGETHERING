@@ -82,7 +82,7 @@ def watch(request, room_name):
         link = request.POST.get('room')
         if(link != ""):
             request.session.create()
-            print(link + " if")
+            # print(link + " if")
             request.session["link"] = link
             request.session.save()
         else:
@@ -91,7 +91,7 @@ def watch(request, room_name):
             session_data = session_obj.get_decoded()
             link = session_data.get("link")
             # link = request.session['link']
-            print(link+" else")
+            # print(link+" else")
 
 
 

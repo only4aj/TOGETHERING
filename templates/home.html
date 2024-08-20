@@ -31,10 +31,10 @@
                 <h1 class="linkhead">Link: </h1>
             </div>
             <div class="field">
-                <p>{{room_name}}</p>
+                {% comment %} <p>{{room_name}}</p> {% endcomment %}
                 <form method="post" action="/watch/{{room_name}}/">
                     {% csrf_token %}
-                    <input class="linkbox" type="text" name="room" id="room" placeholder="Paste the Link Here">
+                    <input class="linkbox" type="text" name="room" id="room" placeholder="Example: https://www.youtube.com/watch?v=SMcPnQ4ZsmA">
     
                     <button type="submit" id="submit" value="submit" class="gobtn">Go →</button>
                 </form>
@@ -52,7 +52,7 @@
                 <a href="https://www.youtube.com/channel/UC23C6Vghe1eROCsvEyM-4hQ"><img src="{% static "images/youtube.png" %}" alt="Y" width="35px" height="35px"></a>
             </div>
 
-            <p class="copyright">Copyright © 2023 TOGETHERING</p>
+            <p class="copyright">Copyright © 2024 TOGETHERING</p>
             <p>All Rights Reserved</p>
         </div>
     </footer>

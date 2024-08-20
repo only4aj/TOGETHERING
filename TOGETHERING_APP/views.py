@@ -9,7 +9,6 @@ import random
 import string
 # global link
 link = ""
-my_link = "https://www.youtube.com/watch?v=0IkXNEJzMmA"
 
 def generate_room_name(length=10):
     characters = string.ascii_letters + string.digits

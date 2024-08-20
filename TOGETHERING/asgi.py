@@ -15,7 +15,7 @@ from channels.routing import ProtocolTypeRouter,URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 from TOGETHERING_APP.routing import websocket_urlpatterns
 
-# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'chatweb.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TOGETHERING.settings')
 
 asgiapplication = get_asgi_application()
 

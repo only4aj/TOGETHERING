@@ -129,13 +129,8 @@
     </script>
   </body>
 </html>
-{% endcomment %}
-
-
-
-{% comment %} --------------------- CORRECTED VERSION ---------- {% endcomment %}
-
-{% comment %} 
+{% endcomment %} {% comment %} --------------------- CORRECTED VERSION
+---------- {% endcomment %} {% comment %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -254,7 +249,7 @@
           },
         });
       }
-      
+
       function onPlayerStateChange(event) {
         if (event.data === YT.PlayerState.PLAYING) {
           chatsocket.send(
@@ -274,11 +269,9 @@
       }
     </script>
   </body>
-</html> {% endcomment %}
-
-
-{% comment %} --------------------------------------------------------------- {% endcomment %}
-
+</html>
+{% endcomment %} {% comment %}
+--------------------------------------------------------------- {% endcomment %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -323,6 +316,17 @@
     <div class="maincontainer">
       <div class="leftside">
         <div class="video-container" id="player"></div>
+
+        <input
+          type="text"
+          class="copylink"
+          id="copylink"
+          name=""
+          id=""
+          value="{{ url }}"
+          readonly
+        />
+        <button class="copybutton" id="copybutton">COPY</button>
       </div>
       <div class="rightside">
         <h1 class="chatboxhead">CHAT BOX</h1>
@@ -331,7 +335,7 @@
           name="chatarea"
           id="chatarea"
           cols="40"
-          rows="15"
+          rows="17"
         ></textarea>
         <input
           type="text"
@@ -343,94 +347,135 @@
       </div>
     </div>
 
+    <footer>
+      <div class="fooflex">
+        <div class="handles">
+          <a href="https://www.facebook.com/john.byro.56"
+            ><img src="{% static "images/facebook.png" %}" alt="F" width="35px"
+            height="35px"></a
+          >
+          <a href="https://www.linkedin.com/in/only4aj/"
+            ><img src="{% static "images/linkedin.png" %}" alt="L" width="35px"
+            height="35px"></a
+          >
+          <a href="https://www.instagram.com/only4aj/"
+            ><img src="{% static "images/instagram.png" %}" alt="I" width="35px"
+            height="35px"></a
+          >
+          <a href="https://www.youtube.com/channel/UC23C6Vghe1eROCsvEyM-4hQ"
+            ><img src="{% static "images/youtube.png" %}" alt="Y" width="35px"
+            height="35px"></a
+          >
+        </div>
+
+        <p class="copyright">Copyright © 2024 TOGETHERING</p>
+        <p>All Rights Reserved</p>
+      </div>
+    </footer>
+
     {{ roomname|json_script:"roomname" }}
     <script>
-      const roomname = JSON.parse(
-        document.getElementById("roomname").textContent
-      );
-      const chatsocket = new WebSocket(
-        "ws://" + location.host + "/ws/watch/" + roomname + "/"
-      );
-      {% comment %} console.log(chatsocket); {% endcomment %}
-      chatsocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        // console.log(e.data);
-        // console.log(data.message);
-        if (data.message) {
-          document.querySelector("#chatarea").value +=
-            data.user + ":" + "\n" + data.message + "\n" + "\n";
-          document.querySelector("#chatarea").scrollTop =
-            document.querySelector("#chatarea").scrollHeight;
-        } else if (data.message_type === "video.play") {
-          if (data.current_time !== undefined) {
-            player.seekTo(data.current_time);
-          }
-          player.playVideo();
-        } else if (data.message_type === "video.pause") {
-          if (data.current_time !== undefined) {
-            player.seekTo(data.current_time);
-          }
-          player.pauseVideo();
-        }
-      };
-      document.getElementById("chatbtn").onclick = function (e) {
-        const msg = document.getElementById("chatinput").value;
-        chatsocket.send(JSON.stringify({ message: msg }));
-        document.querySelector("#chatinput").value = "";
-      };
-      chatsocket.onclose = function (e) {
-        console.log("chatsocket close");
-      };
-      document.querySelector("#chatinput").focus();
-      document.querySelector("#chatinput").onkeyup = function (e) {
-        if (e.keyCode === 13) {
-          // press enter
-          document.querySelector("#chatbtn").click();
-        }
-      };
+          document.getElementById("copybutton").addEventListener("click", function() {
+            // Get the text field
+            var copyText = document.getElementById("copylink");
 
-      // YouTube Player API integration
-      let player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player("player", {
-          height: "390",
-          width: "640",
-          videoId: "{{ video_link }}".split("=")[1], // Replace with actual video ID
-          playerVars: { autoplay: 0, controls: 1 },
-          events: {
-            onStateChange: onPlayerStateChange,
-            onReady: onPlayerReady,
-          },
-        });
-      }
-      function onPlayerReady(event) {
-        // Sync video with others when player is ready
-        chatsocket.send(
-          JSON.stringify({
-            message_type: "video.sync",
-            current_time: player.getCurrentTime(),
-          })
-        );
-      }
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
 
+            // Copy the text inside the text field
+            document.execCommand("copy");
 
-      function onPlayerStateChange(event) {
-        if (event.data === YT.PlayerState.PLAYING) {
-          chatsocket.send(
-            JSON.stringify({
-              message_type: "video.play",
-              current_time: player.getCurrentTime(),
-            })
+            // Alert the copied text (optional)
+            alert("Copied the link: " + copyText.value);
+          });
+
+          const roomname = JSON.parse(
+            document.getElementById("roomname").textContent
           );
-        } else if (event.data === YT.PlayerState.PAUSED) {
-          chatsocket.send(
-            JSON.stringify({
-              message_type: "video.pause",
-              current_time: player.getCurrentTime(),
-            })
+          const chatsocket = new WebSocket(
+            "ws://" + location.host + "/ws/watch/" + roomname + "/"
           );
-        }
-      }
+          {% comment %} console.log(chatsocket); {% endcomment %}
+          chatsocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            // console.log(e.data);
+            // console.log(data.message);
+            if (data.message) {
+              document.querySelector("#chatarea").value +=
+                data.user + ":" + "\n" + data.message + "\n" + "\n";
+              document.querySelector("#chatarea").scrollTop =
+                document.querySelector("#chatarea").scrollHeight;
+            } else if (data.message_type === "video.play") {
+              if (data.current_time !== undefined) {
+                player.seekTo(data.current_time);
+              }
+              player.playVideo();
+            } else if (data.message_type === "video.pause") {
+              if (data.current_time !== undefined) {
+                player.seekTo(data.current_time);
+              }
+              player.pauseVideo();
+            }
+          };
+          document.getElementById("chatbtn").onclick = function (e) {
+            const msg = document.getElementById("chatinput").value;
+            chatsocket.send(JSON.stringify({ message: msg }));
+            document.querySelector("#chatinput").value = "";
+          };
+          chatsocket.onclose = function (e) {
+            console.log("chatsocket close");
+          };
+          document.querySelector("#chatinput").focus();
+          document.querySelector("#chatinput").onkeyup = function (e) {
+            if (e.keyCode === 13) {
+              // press enter
+              document.querySelector("#chatbtn").click();
+            }
+          };
+
+          // YouTube Player API integration
+          let player;
+          function onYouTubeIframeAPIReady() {
+            player = new YT.Player("player", {
+              height: "390",
+              width: "640",
+              videoId: "{{ video_link }}".split("=")[1], // Replace with actual video ID
+              playerVars: { autoplay: 0, controls: 1 },
+              events: {
+                onStateChange: onPlayerStateChange,
+                onReady: onPlayerReady,
+              },
+            });
+          }
+          function onPlayerReady(event) {
+            // Sync video with others when player is ready
+            chatsocket.send(
+              JSON.stringify({
+                message_type: "video.sync",
+                current_time: player.getCurrentTime(),
+              })
+            );
+          }
+
+
+          function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+              chatsocket.send(
+                JSON.stringify({
+                  message_type: "video.play",
+                  current_time: player.getCurrentTime(),
+                })
+              );
+            } else if (event.data === YT.PlayerState.PAUSED) {
+              chatsocket.send(
+                JSON.stringify({
+                  message_type: "video.pause",
+                  current_time: player.getCurrentTime(),
+                })
+              );
+            }
+          }
     </script>
   </body>
 </html>

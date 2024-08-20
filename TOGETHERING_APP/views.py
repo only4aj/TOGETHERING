@@ -9,6 +9,7 @@ import random
 import string
 # global link
 link = ""
+my_link = "https://www.youtube.com/watch?v=0IkXNEJzMmA"
 
 def generate_room_name(length=10):
     characters = string.ascii_letters + string.digits
@@ -77,6 +78,7 @@ def home(request):
 
 @login_required(login_url='login')
 def watch(request, room_name):
+    full_url = f"https://togethering.pythonanywhere.com/{room_name}"
     if request.method == "POST":
         global link
         link = request.POST.get('room')
@@ -87,17 +89,17 @@ def watch(request, room_name):
             request.session.save()
         else:
             session_id = request.session.session_key
-            session_obj = Session.objects.get(session_key=session_id)
-            session_data = session_obj.get_decoded()
-            link = session_data.get("link")
-            # link = request.session['link']
+            Session.objects.filter(session_key=session_id).delete()
+            # session_obj = Session.objects.get(session_key=session_id)
+            # session_data = session_obj.get_decoded()
+            # link = session_data.get("link")
+            # # link = request.session['link']
             # print(link+" else")
 
 
 
-        if(link == ''):
-            return render(request, 'home.html')
-
-    return render(request, 'watchpage.html', context={'roomname': room_name , 'video_link' : link})
+        # if(link == ''):
+        #     return render(request, 'home.html')
+    return render(request, 'watchpage.html', context={'roomname': room_name , 'video_link' : link , 'url' : full_url})
 
     # return render(request, 'home.html')

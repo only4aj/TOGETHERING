@@ -34,7 +34,7 @@
                 {% comment %} <p>{{room_name}}</p> {% endcomment %}
                 <form method="post" action="/watch/{{room_name}}/">
                     {% csrf_token %}
-                    <input class="linkbox" type="text" name="room" id="room" placeholder="Example: https://www.youtube.com/watch?v=SMcPnQ4ZsmA">
+                    <input class="linkbox" type="text" name="room" id="room" placeholder="Example: https://www.youtube.com/watch?v=SMcPnQ4ZsmA" required>
     
                     <button type="submit" id="submit" value="submit" class="gobtn">Go →</button>
                 </form>
@@ -63,16 +63,15 @@
     <script src="{% static "js/homee.js" %}"></script>
     {% endcomment %}
 
-    <!-- Add this script at the end of your home.html file -->
     <script>
 
-        var btn = document.getElementById("submit");
+        {% comment %} var btn = document.getElementById("submit");
     document.querySelector("#room").focus();
     document.querySelector("#room").onkeyup = function(e){
         if (e.keyCode === 13) {// press enter 
             btn.click();
         }
-    };
+    }; {% endcomment %}
     btn.onclick = function(e){
         var roomname = "{{room_name}}";
         window.location.pathname = "/watch/" + roomname + "/";

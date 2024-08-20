@@ -53,25 +53,13 @@
             </div>
 
             <p class="copyright">Copyright © 2024 TOGETHERING</p>
-            <p>All Rights Reserved</p>
+            <p>ANSH JUNEJA</p>
         </div>
     </footer>
 
     <div id="room_name" data-room-name="{{ room_name }}"></div>
 
-    {% comment %}
-    <script src="{% static "js/homee.js" %}"></script>
-    {% endcomment %}
-
     <script>
-
-        {% comment %} var btn = document.getElementById("submit");
-    document.querySelector("#room").focus();
-    document.querySelector("#room").onkeyup = function(e){
-        if (e.keyCode === 13) {// press enter 
-            btn.click();
-        }
-    }; {% endcomment %}
     btn.onclick = function(e){
         var roomname = "{{room_name}}";
         window.location.pathname = "/watch/" + roomname + "/";
@@ -99,11 +87,8 @@
     }
 </script>
 
-<!-- Replace your existing script with this updated script -->
 <script>
 
-
-    // JSON.parse the roomname from JSON string
     const roomname = JSON.parse(document.getElementById("roomname").textContent);
     const chatsocket = new WebSocket(
         'ws://' + window.location.host + '/ws/watch/' + roomname + '/'
@@ -122,22 +107,19 @@
     };
     document.querySelector("#chatinput").focus();
     document.querySelector("#chatinput").onkeyup = function(e){
-        if (e.keyCode === 13) {// press enter 
+        if (e.keyCode === 13) {
             document.querySelector("#chatbtn").click();
         }
     };
 
-    // Add event listener for video link input field
     document.getElementById("vidlink").onkeyup = function(e) {
         var video = document.getElementById("vidlink");
         console.log(video)
-        if (e.keyCode === 13) { // If Enter key is pressed
-            e.preventDefault(); // Prevent the default form submission behavior
+        if (e.keyCode === 13) { 
+            e.preventDefault(); 
             const link = document.getElementById("vidlink").value.trim(); // Get the entered video link
             
-            // Ensure the link is not empty
             if (link !== '') {
-                // Send a message to the WebSocket server to notify others about the new video link
                 if (chatsocket.readyState === WebSocket.OPEN) {
                     chatsocket.send(JSON.stringify({'message_type': 'video.play', 'url': link}));
                 } else {
@@ -145,7 +127,6 @@
                 }
             }
 
-            // Clear the input field
             document.getElementById("vidlink").value = '';
         }
     };

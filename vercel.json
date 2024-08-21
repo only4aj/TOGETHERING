@@ -1,11 +1,5 @@
 {
 
-    "functions": [{
-    "api/**/*.js": {
-      "runtime": "nodejs16.x"
-    }
-    }],
-
     "builds": [{
 
         "src": "TOGETHERING/asgi.py",

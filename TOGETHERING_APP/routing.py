@@ -1,7 +1,7 @@
 from django.urls import re_path
 
-from .consumer import Chating
+from .consumer import Chatting
 
 websocket_urlpatterns = [
-    re_path(r"ws/watch/(?P<room_name>\w+)/$", Chating.as_asgi()),
+    re_path(r"ws/watch/(?P<room_name>\w+)/$", Chatting.as_asgi()),
 ]

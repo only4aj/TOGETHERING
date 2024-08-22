@@ -19,7 +19,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TOGETHERING.settings')
 
 asgiapplication = get_asgi_application()
 
-# app = asgiapplication
+app = asgiapplication
 
 application = ProtocolTypeRouter(
     {
@@ -30,7 +30,7 @@ application = ProtocolTypeRouter(
     }
 )
 
-app = application
+# app = application
 
 # Url router will examine the http path of the connection to route it to a particular consumer based on provided url pattern
 # AuthMiddlewareStack will populate the connection's scope with a reference to the currently authenticated user ,(Similiar to django's request)

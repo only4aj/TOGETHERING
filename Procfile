@@ -1,0 +1,1 @@
+web: python manage.py migrate && python -m gunicorn TOGETHERING.asgi:application -k uvicorn.workers.UvicornWorker

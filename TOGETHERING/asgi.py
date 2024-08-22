@@ -19,6 +19,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TOGETHERING.settings')
 
 asgiapplication = get_asgi_application()
 
+app = asgiapplication
+
 application = ProtocolTypeRouter(
     {
         "http": asgiapplication,

@@ -77,7 +77,8 @@ def home(request):
 
 @login_required(login_url='login')
 def watch(request, room_name):
-    full_url = f"https://togethering.pythonanywhere.com/{room_name}"
+    # full_url = f"https://togethering.pythonanywhere.com/{room_name}"
+    full_url = f"https://togethering.up.railway.app/{room_name}"
     if request.method == "POST":
         global link
         link = request.POST.get('room')

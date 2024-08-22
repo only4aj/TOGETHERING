@@ -143,3 +143,6 @@ STATICFILES_DIRS = os.path.join(BASE_DIR , 'static'),
 STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles_build' , 'static')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+
+CSRF_TRUSTED_ORIGINS = ['https://togethering.up.railway.app']

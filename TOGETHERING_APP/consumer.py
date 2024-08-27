@@ -1,9 +1,6 @@
 import json
-# import time
-import asyncio
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-
 
 ctime = -1
 
@@ -26,12 +23,8 @@ class Chatting(WebsocketConsumer):
             message_type = data['message_type']
             if message_type == 'video.play':
                 current_time = data['current_time']
-                # Broadcast play event with current time to all clients
-                print(current_time)
-                # time.sleep(10)
-                # asyncio.sleep(2)
                 global ctime
-                if ctime!=int(current_time):
+                if ctime != int(current_time):
                     ctime = int(current_time)
                     async_to_sync(self.channel_layer.group_send)(
                         self.room_name, {
@@ -41,14 +34,20 @@ class Chatting(WebsocketConsumer):
                     )
             elif message_type == 'video.pause':
                 current_time = data['current_time']
-                # Broadcast pause event with current time to all clients
                 async_to_sync(self.channel_layer.group_send)(
                     self.room_name, {
                         'type': 'video_pause',
                         'current_time': current_time
                     }
                 )
-            # Handle other message types like audio and webcam.. if needed..
+            elif message_type == 'audio.stream':
+                # Handle the audio streaming data
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_name, {
+                        'type': 'audio_stream',
+                        'audio_data': data['audio_data']
+                    }
+                )
         else:
             msg = data["message"]
             async_to_sync(self.channel_layer.group_send)(
@@ -68,7 +67,6 @@ class Chatting(WebsocketConsumer):
 
     def video_play(self, event):
         current_time = event['current_time']
-        # Update video playback time on client-side
         self.send(text_data=json.dumps({
             'message_type': 'video.play',
             'current_time': current_time
@@ -76,8 +74,14 @@ class Chatting(WebsocketConsumer):
 
     def video_pause(self, event):
         current_time = event['current_time']
-        # Update video playback time on client-side
         self.send(text_data=json.dumps({
             'message_type': 'video.pause',
             'current_time': current_time
+        }))
+
+    def audio_stream(self, event):
+        audio_data = event['audio_data']
+        self.send(text_data=json.dumps({
+            'message_type': 'audio.stream',
+            'audio_data': audio_data
         }))

@@ -66,7 +66,7 @@
     };
 
     // WebSocket Connection
-    var socket = new WebSocket("wss://" + window.location.host + "/ws/watch/{{ room_name }}/");
+    var socket = new WebSocket("ws://" + window.location.host + "/ws/watch/{{ room_name }}/");
 
     // Function to send play event to WebSocket server
     function sendPlayEvent(currentTime) {
@@ -91,7 +91,7 @@
 
     const roomname = JSON.parse(document.getElementById("roomname").textContent);
     const chatsocket = new WebSocket(
-        'wss://' + window.location.host + '/ws/watch/' + roomname + '/'
+        'ws://' + window.location.host + '/ws/watch/' + roomname + '/'
     );
     chatsocket.onmessage = function(e){
         const data = JSON.parse(e.data);

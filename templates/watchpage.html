@@ -183,7 +183,7 @@
         document.getElementById("roomname").textContent
       );
       const chatsocket = new WebSocket(
-        "ws://" + location.host + "/ws/watch/" + roomname + "/"
+        "wss://" + location.host + "/ws/watch/" + roomname + "/"
       );
       chatsocket.onmessage = function (e) {
         const data = JSON.parse(e.data);

@@ -145,14 +145,33 @@ nav ul li a:hover {
 }
 
 
-
-
-.rightside{
+.chatbox{
     display: flex;
     flex-direction: column;
     border: 4px solid rgb(241, 186, 46);
     border-radius: 10px;
     margin-right: 20px;
+}
+
+
+.rightside{
+    display: flex;
+    flex-direction: row;
+}
+
+#micbtn{
+    height: 32px;
+    width: 32px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 15px;
+    margin-top: 3px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: 40px;
+    position: absolute;
+    cursor: pointer;
 }
 
 #chatinput{
@@ -162,7 +181,7 @@ nav ul li a:hover {
 
 .chatboxhead{
     background-color: rgb(241, 186, 46);
-    padding-left: 70px;
+    padding-left: 85px;
     padding-bottom: 5px;
     padding-top: 105;
     color: rgb(247, 237, 237);
